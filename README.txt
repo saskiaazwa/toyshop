@@ -1,0 +1,1 @@
+Extract to XAMPP htdocs, import init.sql in phpMyAdmin, run install_admin.php to create admin (admin@toy.local / admin123), then open index.php.
