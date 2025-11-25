@@ -1,6 +1,6 @@
 # Workflow GitHub Actions untuk Auto Deploy PHP Toyshop
 # Workflow ini akan berjalan otomatis ketika ada push ke branch main
-# Fungsinya: pull kode terbaru dan rebuild semua Docker container
+# Fungsinya: pull kode terbaru dan rebuild semua Docker container 
 
 name: CI/CD Auto Pull and Rebuild
 
