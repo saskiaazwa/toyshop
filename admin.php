@@ -15,10 +15,15 @@
 </form>
 </div></div>
 
-<script>
+<script> // test 
 const modal = document.getElementById('modal'); const form = document.getElementById('productForm');
 function showModal(title){ document.getElementById('m-title').textContent = title; modal.style.display='flex'; }
-function hideModal(){ modal.style.display='none'; form.reset(); form.action.value='create'; form.id.value=''; }
+function hideModal() {
+    modal.style.display='none';
+    form.reset();
+    form.elements['action'].value = 'create';
+    form.elements['id'].value = '';
+}
 document.getElementById('btnAdd').addEventListener('click', ()=>{ showModal('Add Product'); });
 document.getElementById('cancel').addEventListener('click', hideModal);
 async function load(){ const res = await fetch('api/products.php'); const data = await res.json(); const grid = document.getElementById('grid'); grid.innerHTML=''; data.forEach(p=>{ const el=document.createElement('div'); el.className='card'; el.innerHTML = `<img src="${p.image_url||'assets/img/toy1.svg'}" alt=""><h3>${escape(p.name)}</h3><p class="small">${escape(p.description||'')}</p><div class="admin-actions"><span class="badge">$${p.price}</span><button class="btn ghost" onclick="edit(${p.id})">Edit</button><button class="btn" onclick="del(${p.id})">Delete</button></div>`; grid.appendChild(el); }); }
