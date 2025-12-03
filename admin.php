@@ -27,7 +27,18 @@ function hideModal() {
 document.getElementById('btnAdd').addEventListener('click', ()=>{ showModal('Add Product'); });
 document.getElementById('cancel').addEventListener('click', hideModal);
 async function load(){ const res = await fetch('api/products.php'); const data = await res.json(); const grid = document.getElementById('grid'); grid.innerHTML=''; data.forEach(p=>{ const el=document.createElement('div'); el.className='card'; el.innerHTML = `<img src="${p.image_url||'assets/img/toy1.svg'}" alt=""><h3>${escape(p.name)}</h3><p class="small">${escape(p.description||'')}</p><div class="admin-actions"><span class="badge">$${p.price}</span><button class="btn ghost" onclick="edit(${p.id})">Edit</button><button class="btn" onclick="del(${p.id})">Delete</button></div>`; grid.appendChild(el); }); }
-async function edit(id){ const res = await fetch('api/products.php?id='+id); const p = await res.json(); showModal('Edit Product'); form.action.value='update'; form.id.value=p.id; form.name.value=p.name; form.price.value=p.price; form.description.value=p.description; }
+async function edit(id){
+    const res = await fetch('api/products.php?id=' + id);
+    const p = await res.json();
+
+    showModal('Edit Product');
+    
+    form.elements['action'].value = 'update';
+    form.elements['id'].value = p.id;
+    form.elements['name'].value = p.name;
+    form.elements['price'].value = p.price;
+    form.elements['description'].value = p.description;
+}
 form.addEventListener('submit', async (e)=>{ e.preventDefault(); const fd = new FormData(form); const res = await fetch('api/products.php', { method: 'POST', body: fd }); const j = await res.json(); if (j.ok) { hideModal(); load(); } else alert(j.error||'Failed'); });
 async function del(id){ if(!confirm('Delete product?')) return; const fd = new FormData(); fd.append('action','delete'); fd.append('id', id); const res = await fetch('api/products.php', { method:'POST', body: fd }); const j = await res.json(); if (j.ok) load(); else alert(j.error||'Failed'); }
 function escape(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); } load();
