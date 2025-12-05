@@ -39,7 +39,26 @@ async function edit(id){
     form.elements['price'].value = p.price;
     form.elements['description'].value = p.description;
 }
-form.addEventListener('submit', async (e)=>{ e.preventDefault(); const fd = new FormData(form); const res = await fetch('api/products.php', { method: 'POST', body: fd }); const j = await res.json(); if (j.ok) { hideModal(); load(); } else alert(j.error||'Failed'); });
+form.addEventListener('submit', async (e)=>{ e.preventDefault(); const fd = new FormData(form); const res = await fetch('api/products.php', { method: 'POST', body: fd });
+  let j;
+try {
+    j = await res.json();
+} catch (err) {
+    const txt = await res.text();
+    console.error("Non-JSON response:", txt);
+    alert("Server error:\n" + txt);
+    return;
+}
+console.log(j);
+
+
+    if (j.ok) {
+        hideModal();
+        load();
+    } else {
+        alert(j.error || 'Failed');
+    }
+});
 async function del(id){ if(!confirm('Delete product?')) return; const fd = new FormData(); fd.append('action','delete'); fd.append('id', id); const res = await fetch('api/products.php', { method:'POST', body: fd }); const j = await res.json(); if (j.ok) load(); else alert(j.error||'Failed'); }
 function escape(s){ return String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;'); } load();
 </script>
